@@ -5,14 +5,14 @@ CORPUS_DIR      = "corpus"
 SCORE_EPIC      = 50
 SCORE_LEGENDARY = 120
 
-FUNC_RE = re.compile(r"^\s*;\s*func\s+(\w+)\s*->")
-END_RE  = re.compile(r"^\s*;\s*end\s+(\w+)")
+FUNC_RE = re.compile(r"^\s*;\s*func\s+(\w+)\s*->", re.MULTILINE)
+END_RE  = re.compile(r"^\s*;\s*end\s+(\w+)", re.MULTILINE)
 
 SCORING_RULES = [
-    (r"\b(JMP|JZ|JNZ|JG|JL|JGE|JLE|CMP|LABEL)\b", 15),
-    (r"\b(FADD|FSUB|FMUL|FDIV|FNEG|FMA)\b",        10),
-    (r"\b(ADD|SUB|MUL|DIV|SHL|SHR|XOR|AND|OR)\b",   4),
-    (r"\b(LOAD|STORE|ADDR|CONST)\b",                  3),
+    (r"\b(jmp|jz|jnz|jg|jl|jge|jle|cmp|br|ret|call)\b", 15),
+    (r"\b(fadd|fsub|fmul|fdiv|fneg|fma)\b",               10),
+    (r"\b(add|sub|mul|div|shl|shr|xor|and|or)\b",          4),
+    (r"\b(load|store|addr|const)\b",                         3),
 ]
 
 def parse_ir(ir_text):
