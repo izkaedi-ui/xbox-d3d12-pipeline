@@ -1,0 +1,7 @@
+﻿bin/
+corpus/
+out.ir
+*.s
+*.asm
+*.obj
+*.bin
