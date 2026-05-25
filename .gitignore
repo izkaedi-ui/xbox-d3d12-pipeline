@@ -5,3 +5,7 @@ out.ir
 *.asm
 *.obj
 *.bin
+*.ir
+source_shards/
+doom.ir
+lua.ir
