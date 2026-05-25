@@ -1,43 +1,17 @@
 name: VMAX IR Harvest and HuggingFace Sync
-
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'src/zcc_win32_host.c'
-      - 'ir_harvest/**'
-      - 'build.zcc.sh'
-
+  workflow_dispatch:
 jobs:
   harvest:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Build ZCC
-        run: |
-          git clone https://github.com/izkaedi-ui/ZCC.git ../zcc
-          cd ../zcc && make zcc
-          echo "ZCC_BIN=$(pwd)/zcc" >> $GITHUB_ENV
-
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-
       - name: Install dependencies
         run: pip install huggingface_hub
-
-      - name: Compile with ZCC IR telemetry
-        run: |
-          ZCC_EMIT_IR=1 $ZCC_BIN \
-            -D_WIN32_WINNT=0x0A00 \
-            src/zcc_win32_host.c \
-            -S -o /dev/null || true
-
-      - name: Run IR harvest
-        run: python3 ir_harvest/harvest.py --clean
-
       - name: Push corpus to HuggingFace
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
@@ -48,10 +22,10 @@ jobs:
           api = HfApi(token=os.environ["HF_TOKEN"])
           api.upload_folder(
               folder_path="corpus",
-              repo_id="izkaedi-ui/zcc-ir-prime-v1",
+              repo_id="zkaedi/zcc-ir-prime-v1",
               repo_type="dataset",
               path_in_repo="vmax_harvest",
-              commit_message="VMAX auto-harvest from xbox-d3d12-pipeline",
+              commit_message="VMAX manual harvest push",
           )
-          print("Corpus pushed to zcc-ir-prime-v1")
+          print("Done.")
           PYEOF
